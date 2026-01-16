@@ -6,7 +6,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Habilita validação global
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -15,7 +14,6 @@ async function bootstrap() {
     }),
   );
 
-  // Configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('Pokémon Backend API')
     .setDescription(

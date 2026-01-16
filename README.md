@@ -862,7 +862,6 @@ backend/
 │   ├── app.service.ts
 │   └── main.ts
 ├── docker-compose.yml
-├── Dockerfile
 ├── .env.example
 ├── .env
 └── package.json

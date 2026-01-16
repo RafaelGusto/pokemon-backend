@@ -26,7 +26,6 @@ export class ViaCepService {
   constructor(private readonly httpService: HttpService) {}
 
   async getAddressByCep(cep: string): Promise<CepResponse> {
-    // Remove caracteres especiais do CEP
     const cleanCep = cep.replace(/\D/g, '');
 
     if (cleanCep.length !== 8) {
