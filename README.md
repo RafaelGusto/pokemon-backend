@@ -41,7 +41,7 @@ docker --version  # Docker version xx.x.x
 ### 1. Clone o projeto
 
 ```bash
-git clone https://github.com/seu-usuario/pokemon-backend.git
+git clone https://github.com/RafaelGusto/pokemon-backend.git
 cd pokemon-backend
 ```
 
@@ -92,7 +92,6 @@ POKEMON_SYNC_TTL_DAYS=7
 
 - `DB_SYNCHRONIZE=true` cria automaticamente as tabelas no primeiro run
 - `POKEMON_SYNC_TTL_DAYS=7` define 7 dias para revalidar dados da PokéAPI
-- Credenciais padrão são para **desenvolvimento** - altere em produção!
 
 ---
 
@@ -168,16 +167,6 @@ yarn start:dev
 [NestFactory] Starting Nest application...
 ✅ API rodando em http://localhost:3000
 📚 Documentação Swagger: http://localhost:3000/api/docs
-```
-
-### Modo Produção
-
-```bash
-# 1. Build da aplicação
-yarn build
-
-# 2. Iniciar production
-yarn start:prod
 ```
 
 ---
@@ -313,31 +302,6 @@ POST   /pokemon/sync-expired         Resincronizar expirados
 ```
 GET    /cep/{cep}                    Consultar endereço por CEP
 ```
-
----
-
-## 🔐 Credenciais Padrão (Desenvolvimento)
-
-Para testes iniciais, use:
-
-**Banco de Dados MySQL:**
-
-```
-Host: localhost
-Porta: 3306
-Usuário: pokemon_user
-Senha: pokemon_password
-Banco: pokemon_db
-```
-
-**Aplicação:**
-
-```
-Host: http://localhost
-Porta: 3000
-```
-
-⚠️ **IMPORTANTE**: Altere essas credenciais antes de colocar em produção!
 
 ---
 
@@ -489,31 +453,6 @@ POKEMON_SYNC_TTL_DAYS=7        # TTL para revalidar Pokémons (dias)
 
 ---
 
-## 📝 Scripts NPM/Yarn
-
-## � Scripts NPM/Yarn
-
-```bash
-# Instalação
-yarn install
-
-# Desenvolvimento
-yarn start:dev          # Hot-reload mode
-yarn lint              # ESLint
-yarn format            # Prettier
-
-# Build & Produção
-yarn build             # Compilar TypeScript
-yarn start:prod        # Rodar versão compilada
-
-# Testes
-yarn test              # Unit tests
-yarn test:e2e          # E2E tests
-yarn test:cov          # Coverage report
-```
-
----
-
 ## 🚀 Fluxo de Desenvolvimento Recomendado
 
 ### 1º Terminal: Iniciar MySQL via Docker
@@ -570,28 +509,6 @@ services:
 volumes:
   mysql_data:
     driver: local
-```
-
-### Comandos Úteis Docker
-
-```bash
-# Ver status dos containers
-docker-compose ps
-
-# Ver logs de um serviço específico
-docker-compose logs -f mysql
-
-# Conectar ao MySQL via CLI
-docker exec -it pokemon_mysql mysql -u pokemon_user -ppokemod_password pokemon_db
-
-# Limpar tudo (volumes inclusos)
-docker-compose down -v
-
-# Listar volumes
-docker volume ls
-
-# Verificar tamanho dos dados
-docker exec pokemon_mysql du -sh /var/lib/mysql
 ```
 
 ---
@@ -703,19 +620,7 @@ POST /pokemon/fetch/25
 - ✅ Soft delete protege dados históricos
 - ✅ Cascata de deletes gerencia integridade
 
-### Recomendações para Produção
-
-- ⚠️ Altere credenciais do MySQL
-- ⚠️ Use HTTPS/TLS
-- ⚠️ Implemente autenticação/JWT
-- ⚠️ Configure CORS apropriadamente
-- ⚠️ Use rate limiting
-- ⚠️ Monitore logs e erros
-- ⚠️ Backup automático do banco
-
 ---
-
-## 📞 Suporte & Contato
 
 ### Problemas Comuns
 
@@ -756,40 +661,6 @@ POST /pokemon/fetch/25
 
 ---
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja LICENSE para detalhes.
-
----
-
-## 🤝 Contribuições
-
-Contribuições são bem-vindas! Por favor:
-
-1. Fork o repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
----
-
-**Desenvolvido com ❤️ para gerenciar sua coleção de Pokémon**
-"numero": "1000",
-"complemento": "Apto 1001",
-"bairro": "Bela Vista",
-"localidade": "São Paulo",
-"uf": "SP",
-"ibge": "3550308",
-"gia": "",
-"ddd": "11",
-"siafi": "7107"
-}
-
-```
-
----
-
 ## 🔄 Estratégia de Sincronização de Pokémon (TTL)
 
 ### Como Funciona
@@ -812,7 +683,7 @@ Altere em `.env`:
 
 POKEMON_SYNC_TTL_DAYS=7 # Dias até expiração
 
-````
+```
 
 ### Benefícios
 
@@ -865,32 +736,6 @@ POKEMON_SYNC_TTL_DAYS=7 # Dias até expiração
 
 ---
 
-## 🛡️ Regras de Negócio Implementadas
-
-### Treinadores (Trainers)
-
-1. ✅ **Email Único**: Não é possível criar dois Treinadores com o mesmo email.
-2. ✅ **Soft Delete**: Ao deletar, o treinador não é removido do banco, apenas marcado como deletado.
-3. ✅ **Proteção de Exclusão**: Não é possível deletar um Treinador que possua Times ativos.
-4. ✅ **Integração com CEP**: Ao criar ou atualizar um Treinador com CEP, os dados de endereço são enriquecidos via ViaCEP.
-
-### Times (Teams)
-
-1. ✅ **Máximo 5 Pokémons**: Não é possível adicionar mais de 5 Pokémons a um Time.
-2. ✅ **Sem Duplicatas**: Não é possível adicionar o mesmo Pokémon duas vezes no mesmo Time.
-3. ✅ **Cascata de Exclusão**: Ao deletar um Treinador, todos seus Times são deletados.
-4. ✅ **Ordenação**: Pokémons são ordenados automaticamente por posição no Time.
-5. ✅ **Soft Delete**: Times podem ser restaurados após exclusão.
-
-### Pokémons
-
-1. ✅ **Sincronização Automática**: Se um Pokémon não existe localmente, é buscado na PokéAPI.
-2. ✅ **Cache com TTL**: Dados são reutilizados até expiração do TTL.
-3. ✅ **Força de Sincronização**: É possível forçar a revalidação via parâmetro ou endpoint.
-4. ✅ **Revalidação em Massa**: Endpoint para sincronizar todos os Pokémons expirados.
-
----
-
 ## 📊 Exemplo de Fluxo Completo
 
 ### 1. Criar um Treinador
@@ -902,7 +747,7 @@ POST /trainers
   "name": "Ash Ketchum",
   "cep": "01310100"
 }
-````
+```
 
 **Resposta:**
 
@@ -996,24 +841,6 @@ A API retorna erros estruturados:
 
 ---
 
-## 🔐 Variáveis de Ambiente
-
-| Variável                | Padrão                    | Descrição                         |
-| ----------------------- | ------------------------- | --------------------------------- |
-| `DB_HOST`               | localhost                 | Host do MySQL                     |
-| `DB_PORT`               | 3306                      | Porta do MySQL                    |
-| `DB_USER`               | pokemon_user              | Usuário do MySQL                  |
-| `DB_PASSWORD`           | pokemon_password          | Senha do MySQL                    |
-| `DB_NAME`               | pokemon_db                | Nome do banco                     |
-| `DB_SYNCHRONIZE`        | true                      | Auto-sincronizar schema           |
-| `APP_PORT`              | 3000                      | Porta da API                      |
-| `NODE_ENV`              | development               | Ambiente (development/production) |
-| `POKEAPI_BASE_URL`      | https://pokeapi.co/api/v2 | URL base PokéAPI                  |
-| `VIACEP_BASE_URL`       | https://viacep.com.br/ws  | URL base ViaCEP                   |
-| `POKEMON_SYNC_TTL_DAYS` | 7                         | Dias para expiração de cache      |
-
----
-
 ## 📦 Estrutura do Projeto
 
 ```
@@ -1068,74 +895,3 @@ Error: DB_PORT must be a number
 ### Pokémon não encontrado na PokéAPI
 
 A PokéAPI pode estar indisponível. Verifique a conexão e tente novamente.
-
----
-
-## 📞 Suporte
-
-Para mais informações sobre a PokéAPI: https://pokeapi.co/  
-Para mais informações sobre ViaCEP: https://viacep.com.br/
-
----
-
-## 📄 Licença
-
-UNLICENSED
-
----
-
-**Desenvolvido com ❤️ usando NestJS, TypeORM e MySQL**
-
-# unit tests
-
-$ yarn run test
-
-# e2e tests
-
-$ yarn run test:e2e
-
-# test coverage
-
-$ yarn run test:cov
-
-````
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ yarn install -g mau
-$ mau deploy
-````
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
