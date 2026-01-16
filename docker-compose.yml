@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pokemon_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: pokemon_user
+      MYSQL_PASSWORD: pokemon_password
+      MYSQL_DATABASE: pokemon_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    networks:
+      - pokemon_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  pokemon_network:
+    driver: bridge
