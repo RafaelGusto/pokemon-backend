@@ -43,13 +43,13 @@ export class TeamService {
       query.where('team.trainerId = :trainerId', { trainerId });
     }
 
-    return query.leftJoinAndSelect('team.pokémons', 'pokemon').getMany();
+    return query.leftJoinAndSelect('team.pokemons', 'pokemon').getMany();
   }
 
   async findById(id: string): Promise<Team> {
     const team = await this.teamRepository.findOne({
       where: { id },
-      relations: ['pokémons', 'pokémons.pokemon'],
+      relations: ['pokemons', 'pokemons.pokemon'],
     });
 
     if (!team) {
@@ -145,7 +145,7 @@ export class TeamService {
 
     return this.teamRepository.find({
       where: { trainerId },
-      relations: ['pokémons', 'pokémons.pokemon'],
+      relations: ['pokemons', 'pokemons.pokemon'],
     });
   }
 
